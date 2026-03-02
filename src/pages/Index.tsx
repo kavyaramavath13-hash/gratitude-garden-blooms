@@ -4,6 +4,7 @@ import { Flower2, Sparkles, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { GratitudeGarden } from "@/components/GratitudeGarden";
+import { DailyPlanner } from "@/components/DailyPlanner";
 import { getEntries, getTodayEntry, saveEntry, getStreak, type GratitudeEntry } from "@/lib/gratitude-store";
 
 const Index = () => {
@@ -32,7 +33,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-14">
+      <div className="max-w-6xl mx-auto px-4 py-8 sm:py-14">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -77,104 +78,118 @@ const Index = () => {
           )}
         </motion.div>
 
-        {/* Garden */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mb-8"
-        >
-          <GratitudeGarden entries={entries} />
-        </motion.div>
+        {/* Main layout: Garden + Planner */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
+          {/* Left column */}
+          <div className="space-y-6">
+            {/* Garden */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <GratitudeGarden entries={entries} />
+            </motion.div>
 
-        {/* Input area */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-card border border-border rounded-2xl p-6 shadow-sm"
-        >
-          {todayEntry ? (
-            <div className="text-center py-4">
-              <AnimatePresence>
-                {justPlanted && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    className="mb-3"
-                  >
-                    <Sparkles className="w-8 h-8 text-accent mx-auto" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <p className="font-display text-lg text-foreground mb-2">Today's seed is planted 🌱</p>
-              <p className="text-muted-foreground text-sm font-body italic">"{todayEntry.text}"</p>
-              <p className="text-xs text-muted-foreground/60 mt-3 font-body">Come back tomorrow to grow your garden</p>
-            </div>
-          ) : (
-            <>
-              <label className="block font-display text-lg text-foreground mb-3">
-                What are you grateful for today?
-              </label>
-              <Textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Today I'm grateful for..."
-                className="mb-4 bg-background/50 border-border/60 focus:border-primary resize-none font-body text-sm min-h-[100px]"
-                maxLength={280}
-              />
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground font-body">{text.length}/280</span>
-                <Button
-                  onClick={handleSubmit}
-                  disabled={!text.trim()}
-                  className="rounded-full px-6 gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-body"
-                >
-                  <Flower2 className="w-4 h-4" />
-                  Plant a seed
-                </Button>
-              </div>
-            </>
-          )}
-        </motion.div>
-
-        {/* Recent entries */}
-        {entries.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mt-8"
-          >
-            <h2 className="font-display text-lg text-foreground mb-4">Recent Gratitudes</h2>
-            <div className="space-y-3">
-              {[...entries]
-                .sort((a, b) => b.date.localeCompare(a.date))
-                .slice(0, 7)
-                .map((entry) => (
-                  <div
-                    key={entry.id}
-                    className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border/50"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Flower2 className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-foreground font-body">{entry.text}</p>
-                      <p className="text-xs text-muted-foreground mt-1 font-body">
-                        {new Date(entry.date).toLocaleDateString("en-US", {
-                          weekday: "long",
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </p>
-                    </div>
+            {/* Input area */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-card border border-border rounded-2xl p-6 shadow-sm"
+            >
+              {todayEntry ? (
+                <div className="text-center py-4">
+                  <AnimatePresence>
+                    {justPlanted && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0, opacity: 0 }}
+                        className="mb-3"
+                      >
+                        <Sparkles className="w-8 h-8 text-accent mx-auto" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  <p className="font-display text-lg text-foreground mb-2">Today's seed is planted 🌱</p>
+                  <p className="text-muted-foreground text-sm font-body italic">"{todayEntry.text}"</p>
+                  <p className="text-xs text-muted-foreground/60 mt-3 font-body">Come back tomorrow to grow your garden</p>
+                </div>
+              ) : (
+                <>
+                  <label className="block font-display text-lg text-foreground mb-3">
+                    What are you grateful for today?
+                  </label>
+                  <Textarea
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    placeholder="Today I'm grateful for..."
+                    className="mb-4 bg-background/50 border-border/60 focus:border-primary resize-none font-body text-sm min-h-[100px]"
+                    maxLength={280}
+                  />
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-muted-foreground font-body">{text.length}/280</span>
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={!text.trim()}
+                      className="rounded-full px-6 gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-body"
+                    >
+                      <Flower2 className="w-4 h-4" />
+                      Plant a seed
+                    </Button>
                   </div>
-                ))}
-            </div>
+                </>
+              )}
+            </motion.div>
+
+            {/* Recent entries */}
+            {entries.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <h2 className="font-display text-lg text-foreground mb-4">Recent Gratitudes</h2>
+                <div className="space-y-3">
+                  {[...entries]
+                    .sort((a, b) => b.date.localeCompare(a.date))
+                    .slice(0, 7)
+                    .map((entry) => (
+                      <div
+                        key={entry.id}
+                        className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border/50"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Flower2 className="w-4 h-4 text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-foreground font-body">{entry.text}</p>
+                          <p className="text-xs text-muted-foreground mt-1 font-body">
+                            {new Date(entry.date).toLocaleDateString("en-US", {
+                              weekday: "long",
+                              month: "short",
+                              day: "numeric",
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Right column: Planner */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+            className="lg:sticky lg:top-8 lg:self-start"
+          >
+            <DailyPlanner />
           </motion.div>
-        )}
+        </div>
       </div>
     </div>
   );
