@@ -9,12 +9,12 @@ export function GratitudeGarden({ entries }: GratitudeGardenProps) {
   const sorted = [...entries].sort((a, b) => a.date.localeCompare(b.date));
 
   return (
-    <div className="relative w-full min-h-[220px] rounded-2xl overflow-hidden border border-border bg-gradient-to-t from-muted/60 via-card to-card">
+    <div className="relative w-full min-h-[220px] rounded-2xl overflow-hidden border border-border bg-gradient-to-t from-secondary/20 via-secondary/5 to-card">
       {/* Sky */}
-      <div className="absolute inset-0 bg-gradient-to-b from-accent/20 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-garden-light-green/20 via-transparent to-transparent" />
       
       {/* Ground */}
-      <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-garden-soil/20 to-transparent rounded-b-2xl" />
+      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-garden-green/25 via-garden-light-green/15 to-transparent rounded-b-2xl" />
 
       {/* Plants */}
       <div className="relative flex items-end justify-center gap-1 flex-wrap px-4 pt-8 pb-4 min-h-[200px]">
